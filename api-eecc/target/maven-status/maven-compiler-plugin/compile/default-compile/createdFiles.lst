@@ -1,0 +1,11 @@
+Main.class
+com\novatronic\api\eecc\exception\StorageException.class
+com\novatronic\api\eecc\provider\azure\AzureMockProvider.class
+com\novatronic\api\eecc\bean\AccountStatementsResponse.class
+com\novatronic\api\eecc\services\ServicesEECC.class
+com\novatronic\api\eecc\services\implement\ListadoEECCServices.class
+com\novatronic\api\eecc\services\implement\RecuperarEECCServices.class
+com\novatronic\api\eecc\provider\azure\AzureConfigurator.class
+com\novatronic\api\eecc\services\implement\ImplementServicesEECC.class
+com\novatronic\api\eecc\provider\ServiceProvider.class
+com\novatronic\api\eecc\provider\azure\AzureProvider.class
