@@ -50,4 +50,4 @@ jobs:
         app-name: 'apidummynova'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_e0505327c768493cb9f8677050de1991 }}
-        package: '*.War'
+        package: '*.war'
