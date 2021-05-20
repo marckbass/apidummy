@@ -1,0 +1,234 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Dummy",
+    "description": "Spring Boot Dummy application",
+    "contact": {
+      "name": "API Support",
+      "url": "http://www.novatronic.com",
+      "email": "*@novatronic.com"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://{{baseUrl}}:{{basePort}}/api-dummy/v1",
+      "description": "Development server"
+    },
+    {
+      "url": "https://apirestnova.azurewebsites.net",
+      "description": "Test server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "AccountStatement": {
+        "type": "object",
+        "required": [
+          "personId",
+          "periods",
+          "accountStatementId"
+        ],
+        "properties": {
+          "personId": {
+            "type": "string",
+            "description": "Documento de la persona"
+          },
+          "periods": {
+            "type": "string",
+            "description": "Periodo mensual (AAAAMM) del estado de cuenta."
+          },
+          "accountStatementId": {
+            "type": "string",
+            "description": "Identificador del estado de cuenta, compuesto por los valores de los parámetros personId y periods (personId-periods)"
+          },
+          "referenceId": {
+            "type": "string",
+            "description": "Ruta del documento para su posterior descarga, que se compone del contexto actual “account-statements” junto al parámetro “accountStatementId”."
+          },
+          "contentType": {
+            "type": "string",
+            "description": "Tipo de contenido referente al documento a descargar."
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/account-statements": {
+      "get": {
+        "summary": "Listado de estados de cuenta",
+        "description": "Retorna una lista de estados de cuenta basado en el ID de la persona",
+        "operationId": "getAccountStatementsByPersonId",
+        "parameters": [
+          {
+            "name": "personId",
+            "in": "query",
+            "description": "Documento de la persona",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "application/json",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contiene el listado de datos de los estados de cuenta existentes para la persona consultada, disgregado en periodos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccountStatement"
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Accept": {
+                "description": "Se espera un application/json",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Type": {
+                "description": "Se espera un application/json",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Transfer-Encoding": {
+                "description": "Se espera chunked",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Encoding": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Mal URI"
+          },
+          "404": {
+            "description": "No existe personId"
+          },
+          "500": {
+            "description": "Error genérico"
+          }
+        }
+      }
+    },
+    "/account-statements/{accountStatementId}": {
+      "get": {
+        "summary": "Obtiene el documento PDF de estados de cuenta codificado en base64",
+        "description": "",
+        "operationId": "getAccountStatementPdfById",
+        "parameters": [
+          {
+            "name": "accountStatementId",
+            "in": "path",
+            "description": "Identificador del estado de cuenta compuesto por los valores de los parámetros personId y periods (personId-periods).",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "description": "application/json",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Caso exitoso, se retorna archivo PDF codificado en Base64",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "statement": {
+                      "type": "string",
+                      "description": "PDF codificado en Base64"
+                    }
+                  }
+                }
+              }
+            },
+            "headers": {
+              "Accept": {
+                "description": "Se espera un application/json",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Type": {
+                "description": "Se espera un application/json",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Transfer-Encoding": {
+                "description": "Se espera chunked",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Content-Encoding": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Vary": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Mal URI"
+          },
+          "404": {
+            "description": "No existe AccountStatement"
+          },
+          "500": {
+            "description": "Error genérico"
+          }
+        }
+      }
+    }
+  }
+}
